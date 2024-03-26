@@ -21,7 +21,8 @@
       "@/global/*": ["src/global/*"],
       "@/services/*": ["src/services/*"],
       "@/store/*": ["src/store/*"],
-      "@/utils/*": ["src/utils/*"]
+      "@/utils/*": ["src/utils/*"],
+      "@/types/*": ["src/types/*"]
     }
   },
   "include": ["src"]
