@@ -4,14 +4,14 @@ import cookieParser from "cookie-parser";
 import logger from "morgan";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import indexRouter from "@/routes/index";
-import authRouter from "@/routes/auth";
-import userRouter from "@/routes/user";
-import { isAuthenticated } from "@/middlewares/auth";
+import http from "http";
+import { initializeSocketIO } from "socket";
+import apiRouter from "@/routes/index";
 
 dotenv.config();
 const app = express();
-
+const server = http.createServer(app);
+initializeSocketIO(server);
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -19,16 +19,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 // Routes
-app.use("/", indexRouter);
-
-// Auth
-app.use("/auth", authRouter);
-// Auth
-
-// User
-app.use("/user", isAuthenticated, userRouter);
-// User
-
+app.use("/api/v1", apiRouter);
 // Routes
 
 const PORT = process.env.PORT;
