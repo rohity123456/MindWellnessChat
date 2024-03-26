@@ -1,9 +1,5 @@
+import { ActiveStatus, UserRole } from '@/utils/constants';
 import { Schema, model } from 'mongoose';
-
-enum UserRole {
-  ADMIN = "admin",
-  USER = "user",
-}
 
 const userSchema = new Schema({
   username: {
@@ -18,7 +14,7 @@ const userSchema = new Schema({
   },
   status: {
     type: String,
-    enum: ["active", "inactive"],
+    enum: ActiveStatus,
     default: "active",
   },
   lastSeen: Date,  
