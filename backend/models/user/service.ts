@@ -38,3 +38,13 @@ export const updateUser = async (
     return null;
   }
 };
+
+export const getUsers = async (filters: any): Promise<IUser[]> => {
+  try {
+    const users = await User.find(filters);
+    return users.map((user) => user.toObject());
+  } catch (e: any) {
+    catchException(e);
+    return [];
+  }
+};

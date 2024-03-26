@@ -2,10 +2,12 @@ import express from "express";
 import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
-import indexRouter from "./routes/index";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
+import indexRouter from "@/routes/index";
 import authRouter from "@/routes/auth";
+import userRouter from "@/routes/user";
+import { isAuthenticated } from "@/middlewares/auth";
 
 dotenv.config();
 const app = express();
@@ -22,6 +24,10 @@ app.use("/", indexRouter);
 // Auth
 app.use("/auth", authRouter);
 // Auth
+
+// User
+app.use("/user", isAuthenticated, userRouter);
+// User
 
 // Routes
 

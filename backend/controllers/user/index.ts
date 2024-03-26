@@ -1,6 +1,7 @@
-import { createUser, getUserByUsername } from "@/models/user/service";
+import { createUser, getUserByUsername, getUsers } from "@/models/user/service";
+import { UserRole } from "@/utils/constants";
 import { sendJSONResponse } from "@/utils/helper";
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 import Joi from "joi";
 class UserController {
   signInSchema = Joi.object({
@@ -20,6 +21,19 @@ class UserController {
         user = await createUser({ username });
       }
       sendJSONResponse(res, user);
+    } catch (e: any) {
+      sendJSONResponse(res, e, false, 500);
+    }
+  };
+
+  getUsers = async (req: Request, res: Response) => {
+    try {
+      const filters = {
+        ...req.query,
+        role: UserRole.DOCTOR,
+      };
+      const users = await getUsers(filters);
+      sendJSONResponse(res, users);
     } catch (e: any) {
       sendJSONResponse(res, e, false, 500);
     }
