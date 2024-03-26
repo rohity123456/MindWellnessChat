@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' ./app.ts",
+    "start": "nodemon --watch './**/*.ts' --exec 'ts-node -r tsconfig-paths/register' ./app.ts",
     "build": "tsc"
   },
   "dependencies": {
@@ -11,6 +11,7 @@
     "debug": "~2.6.9",
     "dotenv": "^16.4.5",
     "express": "~4.16.1",
+    "joi": "^17.12.2",
     "mongoose": "^8.2.3",
     "morgan": "~1.9.1"
   },
@@ -22,6 +23,7 @@
     "@types/node": "^20.11.30",
     "nodemon": "^3.1.0",
     "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.4.3"
   }
 }
