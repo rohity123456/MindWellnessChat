@@ -1,10 +1,19 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express, { Request, Response, NextFunction } from "express";
+import authRouter from "@/routes/auth";
+import userRouter from "@/routes/user";
+import { isAuthenticated } from "@/middlewares/auth";
 
-const router = express.Router();
+const apiRouter = express.Router();
 
 /* GET home page. */
-router.get('/', function(req: Request, res: Response, next: NextFunction) {
-  res.render('index', { title: 'Express' });
+apiRouter.get("/", function (req: Request, res: Response, next: NextFunction) {
+  res.send("Server is running");
 });
 
-export default router;
+// Auth
+apiRouter.use("/auth", authRouter);
+
+// User
+apiRouter.use("/user", isAuthenticated, userRouter);
+
+export default apiRouter;
