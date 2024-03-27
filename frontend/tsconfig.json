@@ -17,12 +17,14 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
+      "@/*": ["src/*"],
       "@/features/*": ["src/features/*"],
       "@/global/*": ["src/global/*"],
       "@/services/*": ["src/services/*"],
       "@/store/*": ["src/store/*"],
       "@/utils/*": ["src/utils/*"],
-      "@/types/*": ["src/types/*"]
+      "@/types/*": ["src/types/*"],
+      "@/pages/*": ["src/pages/*"]
     }
   },
   "include": ["src"]
