@@ -11,7 +11,7 @@ class UserController {
     try {
       const { error, value } = this.signInSchema.validate(req.body);
       if (error) {
-        sendJSONResponse(res, error.message, false, 400);
+        return sendJSONResponse(res, error.message, false, 400);
       }
       const username = value.username;
       let user = await getUserByUsername(username);
@@ -20,9 +20,9 @@ class UserController {
         console.log("creating user");
         user = await createUser({ username });
       }
-      sendJSONResponse(res, user);
+      return sendJSONResponse(res, user);
     } catch (e: any) {
-      sendJSONResponse(res, e, false, 500);
+      return sendJSONResponse(res, e, false, 500);
     }
   };
 

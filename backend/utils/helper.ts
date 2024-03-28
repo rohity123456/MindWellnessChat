@@ -12,7 +12,14 @@ export const sendJSONResponse = (
   if (success) {
     payload["data"] = data;
   } else {
-    payload["error"] = data;
+    if (typeof data === "string") {
+      payload["error"] = {
+        details: data,
+      };
+    }
+    if (typeof data === "object") {
+      payload["error"] = data;
+    }
   }
   return res.status(status).json(payload);
 };
