@@ -1,0 +1,26 @@
+@import "@/index.scss";
+
+.login {
+  background: $secondary-color;
+  width: 100vw;
+  height: 100vh;
+  h1 {
+    margin: 0;
+    margin-bottom: 1rem;
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    border: 1px solid $primary-color;
+    label {
+      color: $primary-text-color !important;
+      font-size: 1rem !important;
+    }
+    input {
+      font-size: 1rem;
+    }
+  }
+}

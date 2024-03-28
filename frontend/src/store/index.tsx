@@ -4,7 +4,7 @@ const StateContext = createContext({} as any);
 
 const StateProvider: React.FC<{
   reducer: any;
-  initialState: any;
+  initialState: IInitialState;
   children: React.ReactNode;
 }> = ({ reducer, initialState, children }) => {
   return (
@@ -14,5 +14,6 @@ const StateProvider: React.FC<{
   );
 };
 
-export const useStateValue = (): IInitialState => useContext(StateContext);
+export const useStateValue = (): [IInitialState, any] =>
+  useContext(StateContext);
 export default StateProvider;

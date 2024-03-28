@@ -11,9 +11,10 @@ import ErrorPage from "@/pages/error";
 import ChatPage from "@/pages/chat";
 import ChatRoomPage from "@/pages/chatRoom";
 import LoginPage from "@/pages/login";
+import { useStateValue } from "@/store";
 
 function App() {
-  const isAuthenticated = true;
+  const [{ isAuthenticated }] = useStateValue();
   const defaultPrivateRouteProps = {
     isAuthenticated,
     authenticationPath: "/login",
