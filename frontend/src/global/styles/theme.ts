@@ -1,11 +1,12 @@
-const theme = {
+import { ThemeConfig } from "antd";
+
+const theme: ThemeConfig = {
   token: {
     colorPrimary: "#FFED69",
     colorSuccess: "#43c981",
     colorTextBase: "#848484",
     colorText: "#FFFFFF",
     fontFamily: "Roboto, sans-serif",
-    fontWeight: 600,
     fontSize: 12,
     borderRadius: 4,
     wireframe: true,
@@ -20,6 +21,7 @@ const theme = {
   components: {
     Input: {
       colorBorder: "#474747",
+      colorTextPlaceholder: "#9097A6",
     },
     Button: {
       colorPrimary: "#FFED69",
@@ -52,7 +54,7 @@ const theme = {
       actionsBg: "#26282C",
       colorTextDescription: "#9097A6",
     },
-    switch: {
+    Switch: {
       colorPrimary: "#33CE70",
     },
   },
