@@ -14,6 +14,6 @@ apiRouter.get("/", function (req: Request, res: Response, next: NextFunction) {
 apiRouter.use("/auth", authRouter);
 
 // User
-apiRouter.use("/user", isAuthenticated, userRouter);
+apiRouter.use("/users", isAuthenticated, userRouter);
 
 export default apiRouter;
