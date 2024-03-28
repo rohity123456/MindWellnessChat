@@ -29,6 +29,23 @@ code {
     monospace;
 }
 
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.greenDot {
+  @extend .dot;
+  background-color: $success-color;
+}
+
+.redDot {
+  @extend .dot;
+  background-color: $error-color;
+}
+
 :export {
   primary-color: $primary-color;
   secondary-color: $secondary-color;

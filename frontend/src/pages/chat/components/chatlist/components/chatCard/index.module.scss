@@ -1,0 +1,14 @@
+.chatCard {
+  .chatCardTitle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  width: 300px;
+  :global {
+    .ant-card-body {
+      padding-top: 0.5rem;
+    }
+  }
+}

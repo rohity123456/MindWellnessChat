@@ -1,0 +1,11 @@
+.chatList {
+  padding: 1rem;
+  :global {
+    .ant-input-search {
+      width: 300px;
+    }
+  }
+  .chatListUsers {
+    margin-top: 1rem;
+  }
+}
