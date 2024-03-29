@@ -22,7 +22,7 @@ const ChatList: React.FC = () => {
   useEffect(() => {
     const socketManager = SocketManager.getInstance();
     socketManager.getSocket().emit("connectUser", user?._id);
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     getChatOnlineUsers()
