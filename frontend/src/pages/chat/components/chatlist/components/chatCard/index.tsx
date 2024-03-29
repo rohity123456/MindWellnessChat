@@ -3,6 +3,7 @@ import { IUser } from "@/types";
 import { Button, Card } from "antd";
 import styles from "./index.module.scss";
 import { SendOutlined } from "@ant-design/icons";
+import moment from "moment";
 
 interface ChatCardProps {
   chatUser: IUser;
@@ -20,7 +21,14 @@ const ChatCard: React.FC<ChatCardProps> = ({ chatUser, handleStartChat }) => {
   );
   return (
     <Card title={title} className={styles["chatCard"]}>
-      <p>Last Seen: {chatUser.lastSeen?.toString() || "NA"}</p>
+      {isActive ? (
+        <p>Active Now</p>
+      ) : (
+        <p>
+          Last Seen:{" "}
+          {chatUser.lastSeen ? moment().from(chatUser.lastSeen) : "NA"}
+        </p>
+      )}
       <Button
         type="primary"
         icon={<SendOutlined />}
