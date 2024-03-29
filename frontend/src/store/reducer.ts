@@ -6,10 +6,12 @@ export interface IInitialState {
   isAuthenticated: boolean;
 }
 
+const user = localStorage.getItem("user");
+
 export const initialState: IInitialState = {
-  user: null,
+  user: user ? JSON.parse(user) : null,
   doctors: [],
-  isAuthenticated: false,
+  isAuthenticated: !!user,
 };
 export const actionTypes = {
   SET_DOCTOR_LIST: "SET_DOCTOR_LIST",
