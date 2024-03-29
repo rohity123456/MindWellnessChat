@@ -1,0 +1,14 @@
+@import "@/index.scss";
+
+.chatHeader {
+  height: 50px;
+  display: flex;
+  padding: 0.2rem 1rem;
+  .avatar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  box-shadow: 0 0 5px 0 rgba(237, 255, 34, 0.5);
+}

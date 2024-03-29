@@ -1,0 +1,63 @@
+@import "@/index.scss";
+
+.chatMessage {
+  background: $primary-color;
+  position: relative;
+  max-width: 70%;
+  min-width: 20%;
+  margin: 0.3rem;
+  padding: 0.4rem 0.3rem;
+  border-radius: 3px;
+  color: $secondary-text-color;
+
+  &.reciever {
+    margin-left: 10px;
+    &::before {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 0;
+      left: -10px;
+      top: 0;
+      border-radius: 2px;
+      border-top: 10px solid $primary-color;
+      border-bottom: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-left: 10px solid transparent;
+    }
+  }
+  &.sender {
+    background: $secondary-color;
+    color: $primary-text-color;
+    right: 0;
+    justify-self: flex-end;
+    margin-right: 10px;
+    &::after {
+      content: "";
+      position: absolute;
+      border-radius: 2px;
+      width: 0;
+      height: 0;
+      right: -10px;
+      top: 0;
+      border-top: 10px solid $secondary-color;
+      border-bottom: 10px solid transparent;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+    }
+  }
+
+  .content {
+    display: flex;
+    position: relative;
+    p {
+      font-size: 0.9rem;
+    }
+    span {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      font-size: 0.7rem;
+    }
+  }
+}

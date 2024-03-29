@@ -1,13 +1,24 @@
-import { UserRole, ActiveStatus } from "@/global/constants";
+import { ActiveStatus } from "@/global/constants";
 export interface IUser {
+  _id: string;
   username: string;
-  role: UserRole;
   status: ActiveStatus;
-  lastSeen: Date;
-  createdAt: Date;
-  updatedAt: Date;
+  lastSeen: string;
+  createdAt: string;
+  updatedAt?: string;
 }
 
-export interface IDoctor extends IUser {
-  role: UserRole.DOCTOR;
+export interface IRoom {
+  _id: string;
+  users: IUser[];
+}
+
+export interface IMessage {
+  _id: string;
+  content: string;
+  roomId: string;
+  sender: IUser;
+  recipient: IUser;
+  createdAt: string;
+  updatedAt?: string;
 }

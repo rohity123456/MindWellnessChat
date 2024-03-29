@@ -1,0 +1,9 @@
+@import "@/index.scss";
+
+.chatBody {
+  flex: 1;
+  background-color: $secondary-color-light;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}

@@ -1,8 +1,8 @@
-import { IDoctor, IUser } from "@/types/index";
+import { IUser } from "@/types/index";
 
 export interface IInitialState {
   user: IUser | null;
-  doctors: IDoctor[] | [];
+  onlineUsers: IUser[] | [];
   isAuthenticated: boolean;
 }
 
@@ -10,11 +10,11 @@ const user = localStorage.getItem("user");
 
 export const initialState: IInitialState = {
   user: user ? JSON.parse(user) : null,
-  doctors: [],
+  onlineUsers: [],
   isAuthenticated: !!user,
 };
 export const actionTypes = {
-  SET_DOCTOR_LIST: "SET_DOCTOR_LIST",
+  SET_ONLINEUSER_LIST: "SET_ONLINEUSER_LIST",
   SET_USER: "SET_USER",
   SET_AUTHENTICATED: "SET_AUTHENTICATED",
 };
@@ -27,8 +27,8 @@ export interface IAction {
 const reducer = (state: IInitialState, action: IAction) => {
   if (action) {
     switch (action.type) {
-      case actionTypes.SET_DOCTOR_LIST:
-        return { ...state, doctors: action.payload };
+      case actionTypes.SET_ONLINEUSER_LIST:
+        return { ...state, onlineUsers: action.payload };
       case actionTypes.SET_USER:
         return { ...state, user: action.payload };
       case actionTypes.SET_AUTHENTICATED:

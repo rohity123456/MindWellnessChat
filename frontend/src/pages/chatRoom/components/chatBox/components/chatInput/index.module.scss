@@ -1,0 +1,39 @@
+@import "@/index.scss";
+
+.chatInput {
+  height: 50px;
+  display: flex;
+  .textInput {
+    border-radius: 0;
+    flex: 1;
+    padding-top: 0.7rem;
+    font-size: 0.8rem;
+    margin: 0.2rem 0;
+    border-radius: 30px;
+  }
+
+  .emojiBtn,
+  .sendBtn {
+    color: $primary-color;
+    font-weight: bold;
+    font-size: 1.5rem;
+    height: 50px;
+    margin: 0 0.6rem;
+  }
+  .sendBtn {
+    &:disabled {
+      background: gray;
+    }
+  }
+  :global {
+    .ant-btn-icon {
+      margin-inline-end: 0 !important;
+    }
+    .EmojiPickerReact {
+      position: absolute;
+      bottom: 50px;
+      right: 0;
+      z-index: 1;
+    }
+  }
+}

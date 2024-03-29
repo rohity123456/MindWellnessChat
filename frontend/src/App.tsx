@@ -35,7 +35,7 @@ function App() {
               }
             />
             <Route
-              path=":chatId"
+              path=":roomId"
               element={
                 <PrivateRoute
                   {...defaultPrivateRouteProps}
