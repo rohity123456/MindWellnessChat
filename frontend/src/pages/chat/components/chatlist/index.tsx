@@ -59,10 +59,12 @@ const ChatList: React.FC = () => {
   return (
     <div className={styles["chatList"]}>
       <Input.Search
-        placeholder="Search OnlineUsers"
+        placeholder="Search Online Users"
         value={searchValue}
         onChange={(e) => handleSearch(e.target.value)}
       />
+      <h3>Welcome {user?.username}</h3>
+      <h5>Chat with our online users family</h5>
       <List
         dataSource={filteredChats}
         renderItem={(chat) => (
