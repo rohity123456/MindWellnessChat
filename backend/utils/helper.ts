@@ -27,5 +27,4 @@ export const sendJSONResponse = (
 export const catchException = (e: any) => {
   console.log("Error Occured: ");
   console.error(e);
-  throw new Error(e);
 };

@@ -1,8 +1,8 @@
-import { ActiveStatus, UserRole } from "@/utils/constants";
+import { ActiveStatus } from "@/utils/constants";
 
 export interface IUser {
+  _id: string;
   username: string;
-  role: UserRole;
   status: ActiveStatus;
   lastSeen: Date;
   createdAt: Date;
