@@ -1,7 +1,10 @@
 import { IMessage, IUser } from "@/types";
 import styles from "./index.module.scss";
 import { useEffect, useRef, useState } from "react";
-import { getChatMessages } from "@/pages/chat/components/chatlist/service";
+import {
+  createMessage,
+  getChatMessages,
+} from "@/pages/chat/components/chatlist/service";
 import ChatHeader from "./components/chatHeader";
 import ChatInput from "./components/chatInput";
 import ChatBody from "./components/chatBody";
@@ -14,7 +17,7 @@ interface ChatBoxProps {
 
 const ChatBox = ({ roomId, recipient }: ChatBoxProps) => {
   const [messages, setMessages] = useState<IMessage[]>([]);
-  const [page, setPage] = useState<number>(1);
+  const [page] = useState<number>(1);
   const [incomingMessage, setIncomingMessage] = useState<IMessage | null>(null);
   const socketRef = useRef<SocketManager | null>(null);
   const [{ user }] = useStateValue();
@@ -22,29 +25,47 @@ const ChatBox = ({ roomId, recipient }: ChatBoxProps) => {
   useEffect(() => {
     socketRef.current = SocketManager.getInstance();
     const socket = socketRef.current.getSocket();
-    socket.emit("joinRoom", user?._id);
-  }, []);
+    socket.emit("joinRoom", { userId: user?._id, roomId });
+  }, [roomId, user]);
   useEffect(() => {
     getChatMessages(roomId, page).then((data) => {
+      const messages = data.messages;
+      messages.reverse();
       setMessages(data.messages);
     });
     socketRef.current = SocketManager.getInstance();
-  }, [roomId]);
+  }, [roomId, page]);
 
   useEffect(() => {
-    socketRef.current?.getSocket().on("getMessage", (message) => {
-      setIncomingMessage({
+    socketRef.current?.getSocket().on("getMessage", ({ message }) => {
+      console.log("Got message", message);
+      if (!message) return;
+      const messageObj: IMessage = {
         ...message,
+        sender: recipient,
+        recipient: user,
+      };
+      setIncomingMessage({
+        ...messageObj,
       });
     });
-  }, [socketRef]);
+  }, [socketRef, recipient, user]);
 
   useEffect(() => {
     incomingMessage && setMessages((prev) => [...prev, incomingMessage]);
   }, [incomingMessage]);
 
   const handleSendMessage = (message: string) => {
-    console.log(message);
+    createMessage({
+      content: message,
+      sender: user?._id,
+      recipient: recipient?._id,
+      roomId: roomId,
+    }).then((data) => {
+      const socket = socketRef.current?.getSocket();
+      socket?.emit("sendMessage", { message: data });
+      setMessages((prev) => [...prev, { ...data }]);
+    });
   };
 
   return (

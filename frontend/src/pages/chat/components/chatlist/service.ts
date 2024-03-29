@@ -30,11 +30,17 @@ export const getChatRoom = async (roomId: string) => {
 export const getChatMessages = async (
   roomId: string,
   page = 1,
-  pageSize = 10,
+  pageSize = 100,
 ) => {
   return apiService
     .get(`/messages/${roomId}?page=${page}&pageSize=${pageSize}`)
     .then((response) => {
       return response.data;
     });
+};
+
+export const createMessage = async (message: object) => {
+  return apiService.post(`/messages`, message).then((response) => {
+    return response.data;
+  });
 };

@@ -3,7 +3,6 @@
 .chatBody {
   flex: 1;
   background-color: $secondary-color-light;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+  max-height: calc(100vh - 100px);
+  overflow: scroll;
 }

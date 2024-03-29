@@ -17,8 +17,8 @@ export interface IMessage {
   _id: string;
   content: string;
   roomId: string;
-  sender: IUser;
-  recipient: IUser;
+  sender: string;
+  recipient: string;
   createdAt: string;
   updatedAt?: string;
 }
