@@ -1,16 +1,22 @@
 import { Server, ServerOptions } from "socket.io";
 import { Server as HttpServer } from "http";
-import { IMessage } from "@/models/message/types";
-import { MessageStatus } from "@/utils/constants";
-import { createMessage } from "@/models/message/service";
 
-class SocketManager {
+export default class SocketManager {
   private io: Server;
+  private static instance: SocketManager;
   private onlineUsers: Map<string, string> = new Map();
 
   constructor(httpServer: HttpServer, opts?: Partial<ServerOptions>) {
     this.io = new Server(httpServer, opts);
     this.initateConnection();
+  }
+
+  static getInstance(httpServer?: HttpServer, opts?: Partial<ServerOptions>) {
+    if (!SocketManager.instance && httpServer) {
+      console.log("Creating new instance of SocketManager");
+      SocketManager.instance = new SocketManager(httpServer, opts);
+    }
+    return SocketManager.instance;
   }
 
   public getIO(): Server {
@@ -21,6 +27,7 @@ class SocketManager {
   }
 
   private initateConnection() {
+    console.log("Initiating socket connection");
     this.io.on("connection", (socket) => {
       // Connect a user to app
       socket.on("connectUser", (userId) => {
@@ -29,29 +36,33 @@ class SocketManager {
       });
 
       // Join a room
-      socket.on("joinRoom", (roomId, userId) => {
+      socket.on("joinRoom", ({ roomId, userId }) => {
         console.log("joinRoom", roomId, userId);
+        this.setOnlineUsers(userId, socket.id);
         socket.join(roomId);
       });
 
       // Leave a room
-      socket.on("leaveRoom", (roomId) => {
+      socket.on("leaveRoom", ({ roomId, userId }) => {
+        console.log("leaveRoom", roomId);
+        this.removeOnlineUsers(userId);
         socket.leave(roomId);
       });
 
       // Send a message to a room
-      socket.on("sendMessage", ({ senderId, receiverId, message }) => {
-        const sendUserSocket = this.getOnlineUsers().get(receiverId);
+      socket.on("sendMessage", async ({ message }) => {
+        const sendUserSocket = this.getOnlineUsers().get(message.recipient);
+        console.log(
+          "Got message: ",
+          message,
+          "from: ",
+          message.sender,
+          "to: ",
+          message.recipient,
+        );
         if (sendUserSocket) {
-          const messageObj: Partial<IMessage> = {
-            sender: senderId,
-            recipient: receiverId,
-            status: MessageStatus.SENT,
-            content: message,
-          };
-          const messageRes = createMessage(messageObj);
           socket.to(sendUserSocket).emit("getMessage", {
-            message: messageRes,
+            message,
           });
         }
       });
@@ -67,27 +78,25 @@ class SocketManager {
   }
 
   public setOnlineUsers(userId: string, socketId: string) {
-    if (!this.onlineUsers.has(userId)) {
-      this.onlineUsers.set(userId, socketId);
-    }
+    this.onlineUsers.set(userId, socketId);
+  }
+
+  public removeOnlineUsers(userId: string) {
+    this.onlineUsers.delete(userId);
   }
 }
 
-let socketManager: any = null;
-
 export const initializeSocketIO = (httpServer: HttpServer) => {
-  if (!socketManager) {
-    socketManager = new SocketManager(httpServer, {
-      cors: {
-        origin: "*",
-      },
-    });
-  }
+  const clientUrl = process.env.CLIENT_URL;
+  console.log("Client URL: ", clientUrl);
+  const socketManager = SocketManager.getInstance(httpServer, {
+    cors: {
+      origin: clientUrl,
+    },
+  });
   const port = process.env.SOCKET_PORT;
   httpServer.listen(port, () => {
     console.log("Socket.io listening on PORT ", port);
   });
   return socketManager;
 };
-
-export default socketManager as SocketManager;

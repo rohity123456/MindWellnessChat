@@ -1,13 +1,15 @@
+import { CustomRequest } from "@/middlewares/auth";
 import {
   createUser,
   getUserByUsername,
   getUsers,
   getUser,
 } from "@/models/user/service";
-import { sendJSONResponse } from "@/utils/helper";
+import { catchException, sendJSONResponse } from "@/utils/helper";
 import { Request, Response } from "express";
 import Joi from "joi";
 import { ObjectId } from "mongodb";
+import SocketManager from "socket";
 class UserController {
   signInSchema = Joi.object({
     username: Joi.string().alphanum().min(3).max(30).required(),
@@ -31,14 +33,27 @@ class UserController {
     }
   };
 
-  getUsers = async (req: Request, res: Response) => {
+  getUsers = async (req: CustomRequest, res: Response) => {
     try {
+      const user = req.user;
+      const onlineUsers =
+        SocketManager.getInstance().getOnlineUsers() || new Map();
+      let onLineUsersList = Array.from(onlineUsers).map(([key, _]) =>
+        key.toString(),
+      );
+      if (!onLineUsersList.length) return sendJSONResponse(res, []);
+      onLineUsersList = onLineUsersList.filter(
+        (id) => id?.toString() !== user?._id?.toString(),
+      );
+
       const filters = {
         ...req.query,
+        _id: { $in: onLineUsersList },
       };
       const users = await getUsers(filters);
       sendJSONResponse(res, users);
     } catch (e: any) {
+      catchException(e);
       sendJSONResponse(res, e, false, 500);
     }
   };
@@ -56,9 +71,9 @@ class UserController {
   };
 
   checkUsers = async (users: string[]) => {
-    return users.every(
-      async (user) => await getUser({ _id: new ObjectId(user) }),
-    );
+    const userList = await getUsers({ _id: { $in: users } });
+    if (userList.length === users.length) return true;
+    return false;
   };
 }
 

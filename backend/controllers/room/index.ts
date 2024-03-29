@@ -15,7 +15,7 @@ class RoomController {
       if (!userController.checkUsers(users))
         return sendJSONResponse(res, "users not found", false, 404);
       const filters = {
-        users: users,
+        users: { $in: users },
       };
       let room = await getRoom(filters);
       if (!room) {
@@ -37,16 +37,16 @@ class RoomController {
       const filters = {
         _id: new ObjectId(roomID),
       };
-      const rooms = await getRoom(filters);
-      const users = rooms?.users || [];
-
+      const room = await getRoom(filters);
+      const users = room?.users || [];
+      if (!room) return sendJSONResponse(res, "Room not found", false, 404);
       const usersObj = await Promise.all(
         users.map(async (user) => {
           const userObj = await getUser({ _id: new ObjectId(user) });
           return userObj;
         }),
       );
-      sendJSONResponse(res, { ...rooms, users: usersObj });
+      sendJSONResponse(res, { ...room, users: usersObj });
     } catch (e: any) {
       catchException(e);
       sendJSONResponse(res, e, false, 500);

@@ -26,7 +26,6 @@ export const getUserByUsername = async (
 
 export const getUser = async (filters: any): Promise<IUser | null> => {
   try {
-    console.log("GET USER FILTERS: ", filters);
     const user = await User.findOne(filters);
     return user?.toObject() || null;
   } catch (e: any) {
