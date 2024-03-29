@@ -92,7 +92,7 @@ export default class SocketManager {
   }
 
   public removeOnlineUsers(userId: string) {
-    updateUser(userId, { status: ActiveStatus.INACTIVE });
+    updateUser(userId, { status: ActiveStatus.INACTIVE, lastSeen: new Date() });
     this.onlineUsers.delete(userId);
   }
 }
