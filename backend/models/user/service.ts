@@ -35,11 +35,11 @@ export const getUser = async (filters: any): Promise<IUser | null> => {
 };
 
 export const updateUser = async (
-  username: string,
-  user: IUser,
+  userId: string,
+  data: Partial<IUser>,
 ): Promise<IUser | null> => {
   try {
-    const updatedUser = await User.findOneAndUpdate({ username }, user, {
+    const updatedUser = await User.findOneAndUpdate({ _id: userId }, data, {
       new: true,
     });
     return updatedUser?.toObject() || null;

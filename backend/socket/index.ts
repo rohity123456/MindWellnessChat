@@ -1,5 +1,7 @@
 import { Server, ServerOptions } from "socket.io";
 import { Server as HttpServer } from "http";
+import { updateUser } from "@/models/user/service";
+import { ActiveStatus } from "@/utils/constants";
 
 export default class SocketManager {
   private io: Server;
@@ -69,6 +71,13 @@ export default class SocketManager {
 
       socket.on("disconnect", () => {
         console.log("user disconnected");
+        const userId = Array.from(this.onlineUsers).find(
+          ([key, value]) => value === socket.id,
+        );
+        if (userId) {
+          console.log("Removing user: ", userId[0]);
+          this.removeOnlineUsers(userId[0]);
+        }
       });
     });
   }
@@ -78,17 +87,18 @@ export default class SocketManager {
   }
 
   public setOnlineUsers(userId: string, socketId: string) {
+    updateUser(userId, { status: ActiveStatus.ACTIVE });
     this.onlineUsers.set(userId, socketId);
   }
 
   public removeOnlineUsers(userId: string) {
+    updateUser(userId, { status: ActiveStatus.INACTIVE });
     this.onlineUsers.delete(userId);
   }
 }
 
 export const initializeSocketIO = (httpServer: HttpServer) => {
   const clientUrl = process.env.CLIENT_URL;
-  console.log("Client URL: ", clientUrl);
   const socketManager = SocketManager.getInstance(httpServer, {
     cors: {
       origin: clientUrl,
