@@ -6,11 +6,11 @@ import { SendOutlined } from "@ant-design/icons";
 
 interface ChatCardProps {
   chatUser: IUser;
+  handleStartChat: (chatUser: IUser) => void;
 }
 
-const ChatCard: React.FC<ChatCardProps> = ({ chatUser }) => {
+const ChatCard: React.FC<ChatCardProps> = ({ chatUser, handleStartChat }) => {
   if (!chatUser) return null;
-  const handleStartChat = () => {};
   const isActive = chatUser.status === "active";
   const title = (
     <div className={styles["chatCardTitle"]}>
@@ -21,7 +21,11 @@ const ChatCard: React.FC<ChatCardProps> = ({ chatUser }) => {
   return (
     <Card title={title} className={styles["chatCard"]}>
       <p>Last Seen: {chatUser.lastSeen?.toString() || "NA"}</p>
-      <Button type="primary" icon={<SendOutlined />} onClick={handleStartChat}>
+      <Button
+        type="primary"
+        icon={<SendOutlined />}
+        onClick={() => handleStartChat(chatUser)}
+      >
         Start Chat
       </Button>
     </Card>

@@ -1,10 +1,40 @@
 import apiService from "@/services";
 import { IUser } from "@/types";
 
-export interface ChatDoctor extends IUser {}
+export interface ChatOnlineUser extends IUser {}
 
-export const getChatDoctors = async () => {
+export const getChatOnlineUsers = async () => {
   return apiService.get("/users/list").then((response) => {
     return response.data;
   });
+};
+
+export const getOrCreateChatRoom = async (user: IUser, chatUser: IUser) => {
+  const userId = user._id;
+  const chatUserId = chatUser._id;
+  return apiService
+    .post("/rooms", {
+      users: [userId, chatUserId],
+    })
+    .then((response) => {
+      return response.data;
+    });
+};
+
+export const getChatRoom = async (roomId: string) => {
+  return apiService.get(`/rooms/${roomId}`).then((response) => {
+    return response.data;
+  });
+};
+
+export const getChatMessages = async (
+  roomId: string,
+  page = 1,
+  pageSize = 10,
+) => {
+  return apiService
+    .get(`/messages/${roomId}?page=${page}&pageSize=${pageSize}`)
+    .then((response) => {
+      return response.data;
+    });
 };
