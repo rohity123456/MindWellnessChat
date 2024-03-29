@@ -15,7 +15,7 @@ class RoomController {
       if (!userController.checkUsers(users))
         return sendJSONResponse(res, "users not found", false, 404);
       const filters = {
-        users: { $in: users },
+        users: { $all: users },
       };
       let room = await getRoom(filters);
       if (!room) {
