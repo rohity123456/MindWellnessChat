@@ -9,6 +9,12 @@ export const getChatOnlineUsers = async () => {
   });
 };
 
+export const getMyChats = async () => {
+  return apiService.get("/users/mychats").then((response) => {
+    return response.data;
+  });
+};
+
 export const getOrCreateChatRoom = async (user: IUser, chatUser: IUser) => {
   const userId = user._id;
   const chatUserId = chatUser._id;

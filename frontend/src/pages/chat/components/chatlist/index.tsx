@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { List, Input, message } from "antd";
+import { List, Input, message, Tabs } from "antd";
 import {
   ChatOnlineUser,
   getChatOnlineUsers,
+  getMyChats,
   getOrCreateChatRoom,
 } from "./service";
 import ChatCard from "./components/chatCard";
@@ -13,6 +14,7 @@ import SocketManager from "@/socket";
 
 const ChatList: React.FC = () => {
   const [chats, setChats] = useState<ChatOnlineUser[]>([]);
+  const [myChats, setMyChats] = useState<ChatOnlineUser[]>([]);
   const [filteredChats, setFilteredChats] = useState<ChatOnlineUser[]>([]);
   const [searchValue, setSearchValue] = useState<string>("");
   const [messageApi, contextHolder] = message.useMessage();
@@ -33,6 +35,15 @@ const ChatList: React.FC = () => {
       .catch((error) => {
         console.error("Error fetching chat onlineUsers", error);
         messageApi.error("Error fetching chat onlineUsers");
+      });
+
+    getMyChats()
+      .then((data) => {
+        setMyChats(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching my chats", error);
+        messageApi.error("Error fetching my chats");
       });
   }, [messageApi]);
 
@@ -56,22 +67,44 @@ const ChatList: React.FC = () => {
       });
   };
 
+  const [activeTab, setActiveTab] = useState<string>("onlineUsers");
+
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+  };
+
   return (
     <div className={styles["chatList"]}>
-      <Input.Search
-        placeholder="Search Online Users"
-        value={searchValue}
-        onChange={(e) => handleSearch(e.target.value)}
-      />
       <h3>Welcome {user?.username}</h3>
-      <h5>Chat with our online users family</h5>
-      <List
-        dataSource={filteredChats}
-        renderItem={(chat) => (
-          <ChatCard chatUser={chat} handleStartChat={handleStartChat} />
-        )}
-        className={styles["chatListUsers"]}
-      />
+      <h5>Chat with your friends or online community</h5>
+      <Tabs activeKey={activeTab} onChange={handleTabChange}>
+        <Tabs.TabPane tab="Online Users" key="onlineUsers">
+          <Input.Search
+            placeholder="Search Online Users"
+            value={searchValue}
+            onChange={(e) => handleSearch(e.target.value)}
+          />
+          <List
+            dataSource={filteredChats}
+            renderItem={(chat) => (
+              <ChatCard chatUser={chat} handleStartChat={handleStartChat} />
+            )}
+            className={styles["chatListUsers"]}
+          />
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="My Chat" key="myChat">
+          <h3>My Chat</h3>
+          <h5>Chat with your friends</h5>
+          <List
+            dataSource={myChats}
+            renderItem={(chat) => (
+              <ChatCard chatUser={chat} handleStartChat={handleStartChat} />
+            )}
+            className={styles["chatListUsers"]}
+          />
+        </Tabs.TabPane>
+      </Tabs>
+
       {contextHolder}
     </div>
   );
