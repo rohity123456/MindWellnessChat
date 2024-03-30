@@ -8,7 +8,7 @@ import {
 import { catchException, sendJSONResponse } from "@/utils/helper";
 import { Request, Response } from "express";
 import Joi from "joi";
-import { ObjectId } from "mongodb";
+import roomController from "@/controllers/room";
 import SocketManager from "socket";
 class UserController {
   signInSchema = Joi.object({
@@ -66,6 +66,21 @@ class UserController {
       const user = await getUser(filters);
       sendJSONResponse(res, user);
     } catch (e: any) {
+      sendJSONResponse(res, e, false, 500);
+    }
+  };
+
+  getUserChats = async (req: CustomRequest, res: Response) => {
+    try {
+      const usersIds = await roomController.getUserIdsFromRooms(req.user?._id);
+      if (!usersIds?.length) return sendJSONResponse(res, []);
+      const filters = {
+        _id: { $in: usersIds },
+      };
+      const users = await getUsers(filters);
+      sendJSONResponse(res, users);
+    } catch (e: any) {
+      catchException(e);
       sendJSONResponse(res, e, false, 500);
     }
   };

@@ -1,4 +1,4 @@
-import { createRoom, getRoom } from "@/models/room/service";
+import { createRoom, getRoom, getRooms } from "@/models/room/service";
 import { catchException, sendJSONResponse } from "@/utils/helper";
 import { Request, Response } from "express";
 import userController from "@/controllers/user";
@@ -50,6 +50,25 @@ class RoomController {
     } catch (e: any) {
       catchException(e);
       sendJSONResponse(res, e, false, 500);
+    }
+  };
+
+  getUserIdsFromRooms = async (userId: string) => {
+    try {
+      const filters = {
+        users: { $in: [userId] },
+      };
+      const rooms = await getRooms(filters);
+      const userIds = rooms
+        ?.map((room) => {
+          return room.users.filter((id) => id.toString() !== userId.toString());
+        })
+        .flat();
+
+      return userIds;
+    } catch (e: any) {
+      catchException(e);
+      return [];
     }
   };
 }

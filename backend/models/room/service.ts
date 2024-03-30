@@ -36,3 +36,13 @@ export const getRoom = async (filters: any): Promise<IRoom | null> => {
     return null;
   }
 };
+
+export const getRooms = async (filters: any): Promise<IRoom[]> => {
+  try {
+    const rooms = await Room.find(filters);
+    return rooms.map((room) => room.toObject());
+  } catch (e: any) {
+    catchException(e);
+    return [];
+  }
+};
