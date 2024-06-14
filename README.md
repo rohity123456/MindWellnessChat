@@ -1,4 +1,4 @@
-# Mind Wellness Chat 
+# Real time Chat 
 ### A chat application built using socket.io, node, and React in TypeScript. It utilizes MongoDB as the database.
 
  Features:
